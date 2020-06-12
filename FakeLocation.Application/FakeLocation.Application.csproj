@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\FakeApplication.DTO\FakeApplication.DTO.csproj" />
+      <ProjectReference Include="..\FakeApplication.Repository\FakeApplication.Repository.csproj" />
+    </ItemGroup>
+
+</Project>
