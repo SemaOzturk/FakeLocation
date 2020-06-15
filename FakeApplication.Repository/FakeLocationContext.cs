@@ -11,6 +11,6 @@ namespace FakeApplication.Repository
         }
 
         public DbSet<AnchorRE> Anchors { get; set; }
-        
+        public DbSet<TagRE> Tags { get; set; }
     }
 }

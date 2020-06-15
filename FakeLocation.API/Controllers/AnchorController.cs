@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FakeApplication.DTO.ApplicationEntities;
-using FakeLocation.Application.Services;
+using FakeLocation.Application.Services.Interfaces;
 using FakeLocation.Shared.UIModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +14,7 @@ using Microsoft.Extensions.Logging;
 namespace FakeLocation.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class AnchorController : ControllerBase
     {
         private readonly ILogger<AnchorController> _logger;

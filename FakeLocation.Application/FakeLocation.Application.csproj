@@ -9,4 +9,8 @@
       <ProjectReference Include="..\FakeApplication.Repository\FakeApplication.Repository.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Objects" />
+    </ItemGroup>
+
 </Project>

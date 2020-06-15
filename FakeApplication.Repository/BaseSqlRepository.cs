@@ -1,35 +1,38 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using FakeApplication.Repository.Entities;
-using FakeApplication.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace FakeApplication.Repository
 {
-    public class AnchorSqlRepository : IAnchorRepository
+    public abstract class BaseSqlRepository<T> : IRepository<T> where T: class, IRepositoryEntity
     {
         private readonly DbContext _context;
-        private DbSet<AnchorRE> Set => _context.Set<AnchorRE>();
+        private DbSet<T> Set => _context.Set<T>();
 
-        public AnchorSqlRepository(DbContext context)
+        protected BaseSqlRepository(DbContext context)
         {
             _context = context;
         }
 
-        public AnchorRE Get(int id)
+        public virtual T Get(int id)
         {
             return Set.Find(id);
         }
 
-        public IEnumerable<AnchorRE> GetAll()
+        public virtual IEnumerable<T> GetAll()
+        {
+            return Set;
+        }
+        public virtual IQueryable<T> GetAllQueryable()
         {
             return Set;
         }
 
-        public AnchorRE Update(AnchorRE entity)
+        public virtual T Update(T entity)
         {
-            DbSet<AnchorRE> set = Set;
-            AnchorRE found = set.Find(entity.Id);
+            DbSet<T> set = Set;
+            T found = set.Find(entity.Id);
             if (found == null)
             {
                 return null;
@@ -41,17 +44,17 @@ namespace FakeApplication.Repository
 
         }
 
-        public AnchorRE Insert(AnchorRE entity)
+        public virtual T Insert(T entity)
         {
             var tracker = Set.Add(entity);
             _context.SaveChanges();
             return tracker.Entity;
         }
 
-        public AnchorRE Upsert(AnchorRE entity)
+        public virtual T Upsert(T entity)
         {
-            DbSet<AnchorRE> set = Set;
-            AnchorRE found = set.Find(entity.Id);
+            DbSet<T> set = Set;
+            T found = set.Find(entity.Id);
             if (found == null)
             {
                 var tracker = set.Add(entity);
@@ -64,16 +67,11 @@ namespace FakeApplication.Repository
             return found;
         }
 
-        public bool Delete(int id)
+        public virtual bool Delete(int id)
         {
             var set = Set;
             set.Remove(set.Find(id));
             return _context.SaveChanges() > 0;
-        }
-
-        public IQueryable<AnchorRE> GetAllQueryable()
-        {
-            return Set;
         }
     }
 }

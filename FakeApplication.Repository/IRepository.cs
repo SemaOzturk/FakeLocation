@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FakeApplication.Repository
 {
@@ -11,5 +12,6 @@ namespace FakeApplication.Repository
         T Insert(T entity);
         T Upsert(T entity);
         bool Delete(int id);
+        IQueryable<T> GetAllQueryable();
     }
 }

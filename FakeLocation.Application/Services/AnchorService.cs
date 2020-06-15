@@ -1,26 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using FakeApplication.DTO.ApplicationEntities;
-using FakeApplication.Repository;
 using FakeApplication.Repository.Entities;
 using FakeApplication.Repository.Interfaces;
+using FakeLocation.Application.Services.Interfaces;
 
 namespace FakeLocation.Application.Services
 {
-    public interface IAnchorService
-    {
-        Anchor Get(int id);
-        IEnumerable<Anchor> GetAll();
-        void Set(IEnumerable<Anchor> anchors);
-        void Set(params Anchor[] anchors)
-        {
-            Set(anchors.AsEnumerable());
-        }
-
-        Anchor Add(Anchor anchor);
-        void SetCoordinate(int id, double x, double y, double z);
-    }
-
     public class AnchorService : IAnchorService
     {
         private readonly IAnchorRepository _anchorRepository;

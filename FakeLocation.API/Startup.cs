@@ -6,6 +6,7 @@ using AutoMapper;
 using FakeApplication.Repository;
 using FakeApplication.Repository.Interfaces;
 using FakeLocation.Application.Services;
+using FakeLocation.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,6 +35,10 @@ namespace FakeLocation.API
             services.AddControllers();
             services.AddScoped<IAnchorRepository, AnchorSqlRepository>();
             services.AddScoped<IAnchorService, AnchorService>();
+            services.AddScoped<ITagRepository, TagSqlRepository>();
+            services.AddScoped<ITagService, TagService>();
+            services.AddScoped<IFakeLocationCreatorService, FakeLocationService>();
+            
             services.AddAutoMapper(typeof(MapperProfiler));
             services.AddDbContext<DbContext, FakeLocationContext>(builder =>
             {

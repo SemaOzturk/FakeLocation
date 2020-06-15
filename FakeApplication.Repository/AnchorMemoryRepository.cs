@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using FakeApplication.Repository.Entities;
 using FakeApplication.Repository.Interfaces;
 
@@ -59,6 +60,11 @@ namespace FakeApplication.Repository
         public bool Delete(int id)
         {
             return AnchorRes.TryRemove(id, out _);
+        }
+
+        public IQueryable<AnchorRE> GetAllQueryable()
+        {
+            throw new NotImplementedException();
         }
     }
 }
