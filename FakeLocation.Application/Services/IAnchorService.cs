@@ -17,7 +17,8 @@ namespace FakeLocation.Application.Services
             Set(anchors.AsEnumerable());
         }
 
-        bool Add(Anchor anchor);
+        Anchor Add(Anchor anchor);
+        void SetCoordinate(int id, double x, double y, double z);
     }
 
     public class AnchorService : IAnchorService
@@ -58,9 +59,23 @@ namespace FakeLocation.Application.Services
             }
         }
 
-        public bool Add(Anchor anchor)
+        public void SetCoordinate(int id, double x, double y, double z)
         {
-            return _anchorRepository.Insert(Build(anchor)) != null;
+            var found = _anchorRepository.Get(id);
+            if (found != null)
+            {
+                found.X = x;
+                found.Y = y;
+                found.Z = z;
+
+                _anchorRepository.Update(found);
+            }
+        }
+
+        public Anchor Add(Anchor anchor)
+        {
+            var newAnchor = _anchorRepository.Insert(Build(anchor));
+            return Build(newAnchor);
         }
 
         private AnchorRE Build(Anchor entity)

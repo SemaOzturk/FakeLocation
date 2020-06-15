@@ -54,6 +54,7 @@ namespace FakeApplication.Repository
             if (found == null)
             {
                 var tracker = set.Add(entity);
+                _context.SaveChanges();
                 return tracker.Entity;
             }
 

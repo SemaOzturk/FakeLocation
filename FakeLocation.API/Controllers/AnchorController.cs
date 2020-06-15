@@ -43,9 +43,10 @@ namespace FakeLocation.API.Controllers
         {
             try
             {
-                if (_anchorService.Add(_mapper.Map<Anchor>(anchorCreateModel)))
+                Anchor addedAnchor = _anchorService.Add(_mapper.Map<Anchor>(anchorCreateModel));
+                if (addedAnchor != null)
                 {
-                    return Ok();
+                    return Ok(_mapper.Map<AnchorReadModel>(addedAnchor));
                 }
                 else
                 {
