@@ -42,7 +42,8 @@ namespace FakeLocation.API
             services.AddAutoMapper(typeof(MapperProfiler));
             services.AddDbContext<DbContext, FakeLocationContext>(builder =>
             {
-                builder.UseInMemoryDatabase(Configuration.GetConnectionString("InMemory"));
+                //builder.UseInMemoryDatabase(Configuration.GetConnectionString("InMemory"));
+                builder.UseSqlServer(Configuration.GetConnectionString("SqlServer"));
             });
 
             services.AddSwaggerGen(c =>

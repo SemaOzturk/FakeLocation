@@ -28,8 +28,6 @@ namespace FakeLocation.API.Controllers
             _anchorService = anchorService;
             _mapper = mapper;
             _configurationRoot = configurationRoot;
-            var defaultAnchors = _configurationRoot.GetSection("DefaultAnchors").Get<Anchor[]>();
-            _anchorService.Set(defaultAnchors);
         }
 
         [HttpGet]
