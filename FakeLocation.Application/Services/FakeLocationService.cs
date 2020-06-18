@@ -31,7 +31,7 @@ namespace FakeLocation.Application.Services
             _anchorService = anchorService;
             _tagService = tagService;
         }
-
+        
         public async Task StartGenerating(string host, int port)
         {
             _anchors = _anchorService.GetAll().ToDictionary(x => x.Id);
@@ -74,9 +74,12 @@ namespace FakeLocation.Application.Services
             return (ushort) distance;
         }
 
+        //4,1,0,0,82,152,1,65,255,8,4,247,0,0,159,153,46,198,1,103,255,8,4,247,0,0,128,21,124,219,3,176,255,8,4,247,0,0,10,148,124,248,3,156,255,8,4,247,0,0,206,96,82,152,1,61,255,8,4,247,0,0,159,151,82
+        //,152,0,252,255,8,4,247,0,0,159,73,1,2,3,4,241,241,241,241,241,0,0,0,0,0
         private static byte[] CreateLocationMessage(Tag tag, Anchor anchor, ushort distance, uint dataCountNumber)
         {
-            byte[] packet = new byte[26];
+            byte[] packet = new byte[30];
+            var dataCount = BitConverter.GetBytes(1);
             var mobileNodeId = BitConverter.GetBytes(tag.Id);
             var accz = BitConverter.GetBytes(distance); // Rastgele üretilecek
             var readerNodeId = BitConverter.GetBytes(anchor.Id);
@@ -88,6 +91,7 @@ namespace FakeLocation.Application.Services
             packet[3] = 240;
             packet[4] = 240;
             packet[5] = 4;
+            packet[6] = 1;
             packet[9] = mobileNodeId[1];
             packet[10] = mobileNodeId[0];
             packet[11] = accz[1];
@@ -99,11 +103,11 @@ namespace FakeLocation.Application.Services
             packet[18] = dataCountNo[2];
             packet[19] = dataCountNo[1];
             packet[20] = dataCountNo[0];
-            packet[21] = 241;
-            packet[22] = 241;
-            packet[23] = 241;
-            packet[24] = 241;
             packet[25] = 241;
+            packet[26] = 241;
+            packet[27] = 241;
+            packet[28] = 241;
+            packet[29] = 241;
 
             return packet;
         }
