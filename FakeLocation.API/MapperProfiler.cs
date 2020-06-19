@@ -12,6 +12,7 @@ namespace FakeLocation.API
             CreateMap<AnchorCreateModel, Anchor>();
             CreateMap<Tag, TagReadModel>();
             CreateMap<TagCreateModel, Tag>();
+            CreateMap<TagSetCoordinateModel, Tag>();
         }
     }
 }

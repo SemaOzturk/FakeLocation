@@ -9,5 +9,6 @@ namespace FakeLocation.Application.Services.Interfaces
         Tag Insert(Tag tag);
         Tag Update(Tag tag);
         bool UpsertMany(params Tag[] tags);
+        Tag Get(int id);
     }
 }

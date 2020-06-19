@@ -23,8 +23,14 @@ namespace FakeLocation.Application.Services
 
         private readonly IAnchorService _anchorService;
         private readonly ITagService _tagService;
+        private static volatile bool _isGenerating = false;
+        private static readonly ManualResetEvent ResetEvent = new ManualResetEvent(true);
 
-        public bool IsGenerating { get; private set; } = false;
+        public bool IsGenerating
+        {
+            get => _isGenerating;
+            private set => _isGenerating = value;
+        }
 
         public FakeLocationService(IAnchorService anchorService, ITagService tagService)
         {
@@ -32,33 +38,46 @@ namespace FakeLocation.Application.Services
             _tagService = tagService;
         }
         
-        public async Task StartGenerating(string host, int port)
+        public void StartGenerating(string host, int port, double errorMargin = .1d, double errorOverDistanceMultiplier = 0)
         {
+            _isGenerating=false;
+            ResetEvent.WaitOne();
+            ResetEvent.Reset();
             _anchors = _anchorService.GetAll().ToDictionary(x => x.Id);
             _tags = _tagService.GetAll(false).ToDictionary(x => x.Id);
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             _socket.Connect(new IPEndPoint(IPAddress.Parse(host), port));
             uint dataCount = 0;
-            IsGenerating = true;
-            while (IsGenerating)
+            _isGenerating = true;
+            ResetEvent.Set();
+            StartSending(errorMargin, dataCount).ConfigureAwait(false);
+        }
+
+        private async Task StartSending(double errorMargin, uint dataCount)
+        {
+            while (_isGenerating)
             {
+                ResetEvent.WaitOne();
+                ResetEvent.Reset();
                 dataCount++;
                 foreach (Tag tag in _tags.Values)
                 {
                     foreach (Anchor anchor in _anchors.Values)
                     {
-                        var distance = GenerateDistance(tag, anchor, .1);
+                        var distance = GenerateDistance(tag, anchor, errorMargin);
                         var packet = CreateLocationMessage(tag, anchor, distance, dataCount);
                         await _socket.SendAsync(packet, SocketFlags.None);
                     }
                 }
-                Thread.Sleep(1000);
+
+                await Task.Delay(1000);
+                ResetEvent.Set();
             }
         }
 
         public void StopGenerating()
         {
-            IsGenerating = false;
+            _isGenerating = false;
         }
 
         private ushort GenerateDistance(ICoordinate coord1, ICoordinate coord2, double errorMargin)

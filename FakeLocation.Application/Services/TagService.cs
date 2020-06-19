@@ -19,12 +19,17 @@ namespace FakeLocation.Application.Services
         public IEnumerable<Tag> GetAll(bool includeDeactive)
         {
             var query = _tagRepository.GetAllQueryable();
-            if (!includeDeactive)
+            if (includeDeactive)
             {
                 query = query.Where(x => !x.IsActive);
             }
 
             return query.AsEnumerable().Select(Build);
+        }
+
+        public Tag Get(int id)
+        {
+            return Build(_tagRepository.Get(id));
         }
 
         public Tag Insert(Tag tag)

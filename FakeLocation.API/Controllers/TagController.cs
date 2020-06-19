@@ -33,6 +33,21 @@ namespace FakeLocation.API.Controllers
             var tags = _tagService.GetAll(includeDeactive);
             return _mapper.Map<IEnumerable<TagReadModel>>(tags);
         }
+        [HttpGet("{id}")]
+        public TagReadModel GetTag(int id)
+        {
+            var tags = _tagService.Get(id);
+            return _mapper.Map<TagReadModel>(tags);
+        }
+        
+
+        [HttpPut]
+        public IActionResult UpdateTagCoordinate(TagSetCoordinateModel coordinateModel)
+        {
+            var tag = _mapper.Map<Tag>(coordinateModel);
+            var result = _tagService.Update(tag);
+            return result == null ? (IActionResult)BadRequest() : Ok();
+        }
 
         [HttpPost("register/multiple")]
         public IActionResult RegisterMultiple(IEnumerable<TagCreateModel> models)

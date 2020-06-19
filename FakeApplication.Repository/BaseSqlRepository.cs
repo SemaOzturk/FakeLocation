@@ -37,8 +37,8 @@ namespace FakeApplication.Repository
             {
                 return null;
             }
-
-            found = entity;
+            _context.Entry(found).State = EntityState.Detached;
+            _context.Entry(entity).State = EntityState.Modified;
             _context.SaveChanges();
             return found;
 
