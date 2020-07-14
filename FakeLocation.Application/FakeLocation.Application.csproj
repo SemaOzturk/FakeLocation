@@ -13,4 +13,10 @@
       <Folder Include="Objects" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="ReflectorO">
+        <HintPath>..\..\paralel\ReflectorO\bin\Debug\netcoreapp3.0\ReflectorO.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>

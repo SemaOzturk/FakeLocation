@@ -23,7 +23,7 @@ namespace FakeLocation.Application.Services
 
         public IEnumerable<Anchor> GetAll()
         {
-            return _anchorRepository.GetAll().Select(Build);
+            return _anchorRepository.GetAll().Where(x=>x.Id>600).Select(Build);
         }
 
         private Anchor Build(AnchorRE entity)

@@ -15,7 +15,7 @@ namespace FakeLocation.API.Controllers
         }
 
         [HttpGet("generation/start")]
-        public IActionResult StartGeneration(string host = "192.168.10.34", int port = 7000, double errorMargin = .1d, double errorOverDistanceMultiplier = 0)
+        public IActionResult StartGeneration(string host = "192.168.1.72", int port = 7115, double errorMargin = .1d, double errorOverDistanceMultiplier = 0)
         {
             _fakeLocationCreatorService.StartGenerating(host, port, errorMargin, errorOverDistanceMultiplier);
             return Ok();

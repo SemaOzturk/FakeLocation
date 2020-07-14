@@ -20,7 +20,6 @@ namespace FakeLocation.Application.Services
         private Dictionary<int, Tag> _tags = new Dictionary<int, Tag>();
         private Socket _socket;
         private static readonly Random _random = new Random();
-
         private readonly IAnchorService _anchorService;
         private readonly ITagService _tagService;
         private static volatile bool _isGenerating = false;
@@ -40,6 +39,7 @@ namespace FakeLocation.Application.Services
         
         public void StartGenerating(string host, int port, double errorMargin = .1d, double errorOverDistanceMultiplier = 0)
         {
+          
             _isGenerating=false;
             ResetEvent.WaitOne();
             ResetEvent.Reset();
@@ -85,14 +85,27 @@ namespace FakeLocation.Application.Services
             var dx = coord1.X - coord2.X;
             var dy = coord1.Y - coord2.Y;
             var dz = coord1.Z - coord2.Z;
-
             var distance = Math.Sqrt(dx * dx + dy * dy + dz * dz);
             var randomness = (_random.NextDouble() * 2 - 1) * errorMargin;
             distance += randomness * distance;
 
+     
+
             return (ushort) distance;
         }
-
+        public void DisconnectCoordinator(double distance)
+        {
+            Random randDisconnect = new Random();
+            
+            
+            var delayTimer = new System.Timers.Timer
+            {
+                Interval = 1000,
+                AutoReset = true,
+            };
+            delayTimer.Elapsed += ((o, e) => { distance = 0; });
+            delayTimer.Start();
+        }
         //4,1,0,0,82,152,1,65,255,8,4,247,0,0,159,153,46,198,1,103,255,8,4,247,0,0,128,21,124,219,3,176,255,8,4,247,0,0,10,148,124,248,3,156,255,8,4,247,0,0,206,96,82,152,1,61,255,8,4,247,0,0,159,151,82
         //,152,0,252,255,8,4,247,0,0,159,73,1,2,3,4,241,241,241,241,241,0,0,0,0,0
         private static byte[] CreateLocationMessage(Tag tag, Anchor anchor, ushort distance, uint dataCountNumber)
